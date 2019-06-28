@@ -1,0 +1,63 @@
+/*==============================================================*/
+/* Table: EgzemplarzSamochod                                    */
+/*==============================================================*/
+create table EgzemplarzSamochod (
+   Id_egzemplarza       int                  not null,
+   Id_slownika          int                  null,
+   Rok_produkcji        datetime             null,
+   Numer_podwozia       varchar(50)          null,
+   Numer_silnika        varchar(50)          null,
+   constraint PK_EGZEMPLARZSAMOCHOD primary key nonclustered (Id_egzemplarza)
+)
+go
+
+/*==============================================================*/
+/* Table: Osoba                                                 */
+/*==============================================================*/
+create table Osoba (
+   Id_osoby             int                  not null,
+   Imie                 varchar(50)          null,
+   Nazwisko             varchar(50)          null,
+   Pesel                varchar(13)          null,
+   Adres                varchar(50)          null,
+   constraint PK_OSOBA primary key nonclustered (Id_osoby)
+)
+go
+
+/*==============================================================*/
+/* Table: Rejestracja                                           */
+/*==============================================================*/
+create table Rejestracja (
+   Id_egzemplarza       int                  not null,
+   Id_osoby             int                  not null,
+   Data_rejestracji     date                 null,
+   Numer_rejestracyjny  varchar(20)          null,
+   constraint PK_REJESTRACJA primary key (Id_egzemplarza, Id_osoby)
+)
+go
+
+/*==============================================================*/
+/* Table: SlownikSamochod                                       */
+/*==============================================================*/
+create table SlownikSamochod (
+   Id_slownika          int                  not null,
+   Marka                varchar(50)          null,
+   Model                varchar(50)          null,
+   constraint PK_SLOWNIKSAMOCHOD primary key nonclustered (Id_slownika)
+)
+go
+
+alter table EgzemplarzSamochod
+   add constraint FK_EGZEMPLA_RELATIONS_SLOWNIKS foreign key (Id_slownika)
+      references SlownikSamochod (Id_slownika)
+go
+
+alter table Rejestracja
+   add constraint FK_REJESTRA_RELATIONS_EGZEMPLA foreign key (Id_egzemplarza)
+      references EgzemplarzSamochod (Id_egzemplarza)
+go
+
+alter table Rejestracja
+   add constraint FK_REJESTRA_RELATIONS_OSOBA foreign key (Id_osoby)
+      references Osoba (Id_osoby)
+go
